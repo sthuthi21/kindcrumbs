@@ -131,6 +131,29 @@ app.put('/edit-donation/:id', (req, res) => {
     });
 });
 
+// Route for adding restaurant details
+app.post('/add_restaurant', (req, res) => {
+    const { name, address, contactInfo } = req.body; // Get data from request
+    const userId = 1; // Assuming a default UserID or replace with actual logic
+
+    // Insert data into the Restaurants table
+    const query = `
+        INSERT INTO Restaurants (UserID, Name, Address, ContactInfo)
+        VALUES (?, ?, ?, ?)
+    `;
+    const values = [userId, name, address, contactInfo]; // Ensure this matches your table structure
+
+    connection.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Error adding restaurant:', err);
+            return res.status(500).send('Error adding restaurant');
+        } 
+        res.status(201).send({ id: result.insertId, name, address, contactInfo });
+    });
+});
+
+
+
 
 
 // Start the server
